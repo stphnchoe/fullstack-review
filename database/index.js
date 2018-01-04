@@ -31,10 +31,20 @@ let find = (callback) => {
   
 }
 
-let save = (data) => {
+let save = (data, callback) => {
   // TODO: Your code here
-  let userRepo = new Repo(data);
-  userRepo.save();
+  data.forEach((item) => {
+    let userRepo = new Repo({
+            id: item.id,
+            name: item.name,
+            username:  item.owner.login,
+            description: item.description || '',
+            url: item.html_url,
+            stargazers_count: item.stargazers_count
+          });
+    userRepo.save();
+  })
+  callback();
   // This function should save a repo or repos to
   // the MongoDB
 }
