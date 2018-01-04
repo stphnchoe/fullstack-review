@@ -9,11 +9,20 @@ app.use(bodyParser.json());
 
 app.post('/repos', function (req, res) {
   // TODO - your code here!
-  usernameOptions.getReposByUsername(req.body.username, function() {
+  usernameOptions.getReposByUsername(req.body.username, function(data) {
+    data.forEach((item) => {
+      db.save({
+            id: item.id,
+            name: item.name,
+            username:  item.owner.login,
+            description: item.description || '',
+            url: item.html_url,
+            stargazers_count: item.stargazers_count
+          });
+    })
     res.end();
   });
 
-  // res.end();
   // This route should take the github username provided
   // and get the repo information from the github API, then
   // save the repo information in the database
